@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portafolio de Evidencias - UAEMéx</title>
+    <style>
+        /* Variables de color inspiradas en la UAEMéx (ajustar según colores exactos) */
+        :root {
+            --primary-color: #4CAF50; /* Verde principal, puedes ajustar al verde de la UAEMéx */
+            --secondary-color: #FFC107; /* Amarillo/Dorado, puedes ajustar al dorado de la UAEMéx */
+            --accent-color: #F44336; /* Rojo para acentos o errores */
+            --dark-color: #212121; /* Negro o gris oscuro */
+            --light-color: #F5F5F5; /* Gris claro para fondos */
+            --text-color: #333;
+            --header-bg: linear-gradient(135deg, var(--primary-color), var(--dark-color)); /* Gradiente para el header */
+            --transition: all 0.4s ease;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--light-color);
+            color: var(--text-color); /* Using text-color variable */
+            line-height: 1.6;
+            background-image: url('https://i.ytimg.com/vi/5WPWxI43KTc/maxresdefault.jpg'); 
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+        }
+        
+        header {
+            background: var(--header-bg);
+            color: #FFF; /* White text for better contrast on gradient */
+            text-align: center;
+            padding: 60px 20px;
+            position: relative;
+            overflow: hidden;
+            background-size: cover;
+            background-position: center;
+        }
+        
+        header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 30px;
+            background: linear-gradient(to bottom right, transparent 49%, var(--light-color) 50%);
+        }
+        
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            font-weight: 300;
+            margin-bottom: 30px;
+        }
+        
+        .subjects-nav {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            padding: 30px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .subject-btn {
+            padding: 18px 30px;
+            background-color: rgba(234, 240, 188, 0.999);
+            color: var(--dark-color);
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            transition: var(--transition);
+            min-width: 220px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            margin: 5px;
+        }
+        
+        .subject-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+            background-color: var(--primary-color);
+            transition: var(--transition);
+        }
+        
+        .subject-btn:hover::before {
+            width: 100%;
+            opacity: 0.2;
+        }
+        
+        .subject-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+        
+        .subject-btn.active {
+            background-color: var(--primary-color);
+            color: #FFF; /* White text for active button */
+        }
+        
+        .subjects-content {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 20px;
+            max-height: 0; 
+            overflow: hidden;
+            opacity: 0;
+            transition: max-height 0.7s ease-out, opacity 0.5s ease-out;
+        }
+
+        .subjects-content.show-content {
+            max-height: 2000px; 
+            opacity: 1;
+        }
+        
+        .subject-section {
+            display: none;
+            padding: 30px;
+            background-color: rgba(255, 255, 255, 0.9); /* Lighter background for section content */
+            border-radius: 12px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+            animation: fadeIn 0.5s ease;
+            color: var(--text-color);
+        }
+        
+        .subject-section.active {
+            display: block;
+        }
+        
+        .subject-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #ddd; /* Lighter border */
+        }
+        
+        .subject-icon {
+            font-size: 2rem;
+            margin-right: 15px;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--light-color);
+            border-radius: 50%;
+            color: var(--primary-color);
+        }
+        
+        .subject-title {
+            flex-grow: 1;
+        }
+        
+        .subject-title h2 {
+            font-size: 1.8rem;
+            margin-bottom: 5px;
+            color: var(--dark-color);
+        }
+        
+        .subject-description {
+            font-size: 0.95rem;
+            color: #555; /* Darker gray for better readability */
+            line-height: 1.5;
+        }
+        
+        .evidence-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        .evidence-card {
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            transition: var(--transition);
+            border: 1px solid #eee;
+            cursor: pointer;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .evidence-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+        
+        .evidence-img {
+            height: 180px;
+            background-color: #f0f0f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        
+        .evidence-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .evidence-content {
+            padding: 20px;
+            flex-grow: 1; /* Allows content to fill space */
+        }
+        
+        .evidence-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--dark-color);
+        }
+        
+        .evidence-date {
+            font-size: 0.85rem;
+            color: #888;
+            margin-bottom: 10px;
+        }
+        
+        .evidence-desc {
+            font-size: 0.9rem;
+            color: #666;
+            line-height: 1.5;
+            display: -webkit-box;
+            -webkit-line-clamp: 4; /* Allow a bit more text */
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin-bottom: 10px;
+        }
+        
+        .evidence-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            border-top: 1px solid #eee;
+            font-size: 0.85rem;
+            color: #888;
+            margin-top: auto; /* Pushes footer to bottom */
+        }
+        
+        .evidence-type {
+            display: inline-block;
+            padding: 3px 10px;
+            background-color: var(--light-color);
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--dark-color);
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 100;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.8);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .modal.active {
+            display: block;
+            opacity: 1;
+        }
+        
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 30px;
+            width: 80%;
+            max-width: 700px; /* Adjusted max-width for PDF focus */
+            border-radius: 12px;
+            box-shadow: 0 5px 30px rgba(0, 0, 0, 0.3);
+            position: relative;
+            animation: modalSlideIn 0.4s ease;
+            color: var(--text-color);
+        }
+        
+        .close-modal {
+            position: absolute;
+            right: 25px;
+            top: 15px;
+            font-size: 28px;
+            font-weight: bold;
+            color: #888;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .close-modal:hover {
+            color: var(--accent-color);
+        }
+        
+        .modal-header {
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .modal-title {
+            font-size: 1.8rem;
+            color: var(--dark-color);
+        }
+        
+        .modal-subtitle {
+            font-size: 1rem;
+            color: #777;
+            margin-top: 5px;
+        }
+        
+        .modal-body {
+            margin-bottom: 30px;
+            max-height: 60vh; 
+            overflow-y: auto; 
+        }
+        
+        .modal-img {
+            width: 100%;
+            max-height: 200px; /* Smaller image for PDF card */
+            object-fit: contain; /* Changed to contain for placeholder */
+            margin-bottom: 20px;
+            border-radius: 8px;
+        }
+        
+        .modal-description {
+            line-height: 1.6;
+            color: #555;
+            white-space: pre-wrap; 
+            margin-bottom: 20px;
+        }
+
+        #modalPdfLinkContainer {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        #modalPdfViewLink {
+            display: inline-block;
+            padding: 12px 25px;
+            background-color: var(--primary-color);
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+        #modalPdfViewLink:hover {
+            background-color: #3e8e41; /* Darker shade of primary */
+        }
+        
+        .tag {
+            display: inline-block;
+            padding: 5px 10px;
+            background-color: var(--light-color);
+            border-radius: 20px;
+            font-size: 0.8rem;
+            margin-right: 5px;
+            margin-bottom: 5px;
+            color: var(--dark-color);
+            transition: var(--transition);
+        }
+        
+        .tag:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes modalSlideIn {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        footer {
+            background-color: var(--dark-color);
+            color: white;
+            text-align: center;
+            padding: 30px 20px;
+            margin-top: 50px;
+        }
+        
+        .footer-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .scroll-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            transition: var(--transition);
+            z-index: 99;
+            opacity: 0;
+            visibility: hidden;
+        }
+        
+        .scroll-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .scroll-top:hover {
+            background-color: var(--dark-color);
+            transform: translateY(-5px);
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            .subject-btn {
+                min-width: 140px;
+                padding: 12px 15px;
+                font-size: 0.9rem;
+            }
+            
+            .subject-section {
+                padding: 20px;
+            }
+            
+            .evidence-grid {
+                grid-template-columns: 1fr; /* Single column for smaller screens */
+            }
+            
+            .modal-content {
+                width: 95%;
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Portafolio de Evidencias - UAEMéx</h1>
+        <p class="subtitle">Colección de trabajos, prácticas y proyectos académicos</p>
+    </header>
+    
+    <div class="subjects-nav">
+        <button class="subject-btn" data-subject="artes">Artes</button>
+        <button class="subject-btn" data-subject="sociologia">Sociología</button>
+        <button class="subject-btn" data-subject="desarrollo">Desarrollo Emprendedor</button>
+        <button class="subject-btn" data-subject="estadistica">Estadística</button>
+        <button class="subject-btn" data-subject="psicologia">Psicología</button>
+        <button class="subject-btn" data-subject="ciudadania">Ciudadanía</button>
+        <button class="subject-btn" data-subject="ciencia">Ciencia</button>
+        <button class="subject-btn" data-subject="historia">Historia</button>
+    </div>
+    
+    <div class="subjects-content" id="main-content-area">
+        <div id="artes" class="subject-section">
+            <div class="subject-header">
+                <div class="subject-icon">🎨</div>
+                <div class="subject-title">
+                    <h2>Artes</h2>
+                    <p class="subject-description">Exploración de diversas manifestaciones artísticas y proyectos creativos.</p>
+                </div>
+            </div>
+            <div class="evidence-grid">
+            </div>
+        </div>
+        
+        <div id="sociologia" class="subject-section">
+            <div class="subject-header">
+                <div class="subject-icon">👥</div>
+                <div class="subject-title">
+                    <h2>Sociología</h2>
+                    <p class="subject-description">Análisis de fenómenos sociales, culturales y estructuras de la sociedad.</p>
+                </div>
+            </div>
+            <div class="evidence-grid">
+            </div>
+        </div>
+
+        <div id="desarrollo" class="subject-section">
+            <div class="subject-header">
+                <div class="subject-icon">🚀</div>
+                <div class="subject-title">
+                    <h2>Desarrollo Emprendedor</h2>
+                    <p class="subject-description">Proyecto colaborativo "Sanasweet" realizado por estudiantes del Plantel Dr. Pablo González Casanova de la UAEMéx. Integrantes: Claudes Villagran Roberto Azahed, Gómez Albarrán Armando, Mejía Garduño Alexander, Vázquez Pérez Joaquín Jesús, Zamudio Arias Gricet Danae.</p>
+                </div>
+            </div>
+            <div class="evidence-grid">
+            </div>
+        </div>
+
+        <div id="estadistica" class="subject-section">
+            <div class="subject-header">
+                <div class="subject-icon">📊</div>
+                <div class="subject-title">
+                    <h2>Estadística</h2>
+                    <p class="subject-description">Aplicación de métodos estadísticos para el análisis de datos y la toma de decisiones.</p>
+                </div>
+            </div>
+            <div class="evidence-grid">
+            </div>
+        </div>
+
+        <div id="psicologia" class="subject-section">
+            <div class="subject-header">
+                <div class="subject-icon">🧠</div>
+                <div class="subject-title">
+                    <h2>Psicología</h2>
+                    <p class="subject-description">Estudio del comportamiento humano, procesos mentales y desarrollo personal.</p>
+                </div>
+            </div>
+            <div class="evidence-grid">
+            </div>
+        </div>
+
+        <div id="ciudadania" class="subject-section">
+            <div class="subject-header">
+                <div class="subject-icon">🌐</div>
+                <div class="subject-title">
+                    <h2>Ciudadanía</h2>
+                    <p class="subject-description">Proyectos y reflexiones sobre participación ciudadana, derechos y deberes.</p>
+                </div>
+            </div>
+            <div class="evidence-grid">
+            </div>
+        </div>
+
+        <div id="ciencia" class="subject-section">
+            <div class="subject-header">
+                <div class="subject-icon">🔬</div>
+                <div class="subject-title">
+                    <h2>Ciencia</h2>
+                    <p class="subject-description">Investigaciones, experimentos y proyectos relacionados con diversas áreas científicas.</p>
+                </div>
+            </div>
+            <div class="evidence-grid">
+            </div>
+        </div>
+
+        <div id="historia" class="subject-section">
+            <div class="subject-header">
+                <div class="subject-icon">📜</div>
+                <div class="subject-title">
+                    <h2>Historia</h2>
+                    <p class="subject-description">Estudios y análisis de eventos pasados y su impacto en el presente.</p>
+                </div>
+            </div>
+            <div class="evidence-grid">
+            </div>
+        </div>
+    </div>
+    
+    <div id="evidenceModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalEvidenceTitle"></h3>
+                <p class="modal-subtitle" id="modalEvidenceDate"></p>
+            </div>
+            <div class="modal-body">
+                <img src="" alt="" class="modal-img" id="modalEvidenceImg">
+                <p class="modal-description" id="modalEvidenceDesc"></p>
+                <div id="modalPdfLinkContainer" style="display:none;">
+                    <a href="#" id="modalPdfViewLink" target="_blank">Ver Documento PDF Completo</a>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <span class="tag" id="modalEvidenceType"></span>
+                <span id="modalEvidenceScore"></span>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2025 Portafolio de Evidencias UAEMéx. Todos los derechos reservados juakim.</p>
+        </div>
+    </footer>
+    
+    <div class="scroll-top" id="scrollTopBtn">⬆️</div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const subjectBtns = document.querySelectorAll('.subject-btn');
+            const subjectSections = document.querySelectorAll('.subject-section');
+            const subjectsContent = document.getElementById('main-content-area');
+            const modal = document.getElementById('evidenceModal');
+            const closeModalBtn = document.querySelector('.close-modal');
+            const modalEvidenceTitle = document.getElementById('modalEvidenceTitle');
+            const modalEvidenceDate = document.getElementById('modalEvidenceDate');
+            const modalEvidenceImg = document.getElementById('modalEvidenceImg');
+            const modalEvidenceDesc = document.getElementById('modalEvidenceDesc');
+            const modalEvidenceType = document.getElementById('modalEvidenceType');
+            const modalEvidenceScore = document.getElementById('modalEvidenceScore');
+            const scrollTopBtn = document.getElementById('scrollTopBtn');
+            
+            const modalPdfLinkContainer = document.getElementById('modalPdfLinkContainer');
+            const modalPdfViewLink = document.getElementById('modalPdfViewLink');
+
+            let contentShown = false;
+
+            const evidenceData = {
+                artes: [], // Eliminada la evidencia de Artes
+                sociologia: [
+                    {
+                        id: 'sociologia-proyecto-1',
+                        title: 'Investigación sobre Impacto Social de la Tecnología',
+                        date: 'Abril 2024',
+                        imgSrc: 'https://via.placeholder.com/600x400?text=Sociologia+Tecnologia', 
+                        description: 'Análisis del efecto de las redes sociales en las interacciones juveniles y la formación de identidades.',
+                        fullDescription: 'Este proyecto de investigación explora cómo el uso extensivo de las redes sociales está reconfigurando las interacciones sociales entre jóvenes y su impacto en la construcción de la identidad personal y colectiva. Se utilizó una metodología mixta, combinando encuestas a estudiantes y entrevistas a profundidad con expertos en sociología digital y psicología juvenil.\n\nPara ver el documento completo, haz clic en el botón de abajo.',
+                        type: 'Documento PDF',
+                        score: 'Sobresaliente',
+                        pdfUrl: 'https://drive.google.com/file/d/1k-t9PtVDyOzf8wA2ASeDVm-A-7S_RVvr/preview' 
+                    }
+                ],
+                desarrollo: [
+                    {
+                        id: 'sanasweet-full-project-pdf',
+                        title: 'Proyecto Completo: Sanasweet Desarrollo Emprendedor',
+                        date: '2024', 
+                        imgSrc: 'https://via.placeholder.com/600x400?text=Proyecto+Sanasweet+PDF', // Un placeholder genérico
+                        description: 'Documento PDF completo del proyecto colaborativo "Sanasweet". Detalla el plan de negocio, análisis de mercado, estrategias de distribución y marketing, recursos necesarios, estructura de costos y fuentes de ingreso.',
+                        fullDescription: 'Este documento PDF contiene el plan de negocio completo para "Sanasweet", una empresa dedicada a la producción de dulces medicados para facilitar la administración de tratamientos a niños. El proyecto fue desarrollado por estudiantes del Plantel Dr. Pablo González Casanova de la UAEMéx.\n\nPara acceder al documento completo, por favor haz clic en el botón de abajo.',
+                        type: 'Documento PDF',
+                        score: 'Completo',
+                        pdfUrl: 'https://drive.google.com/file/d/1rM2F4ZF7dtTBISw90YlpnVziQckZ91F5/preview' 
+                    },
+                    {
+                        id: 'sanasweet-avance-reporte',
+                        title: 'Reporte de Avance - Sanasweet (Módulo 1)',
+                        date: 'Abril 2024', 
+                        imgSrc: 'https://via.placeholder.com/600x400?text=Reporte+Avance+Sanasweet', 
+                        description: 'Este reporte detalla el avance del proyecto Sanasweet, cubriendo innovación, modelo de negocio, propuesta de valor, investigación de mercado y estrategia de marketing inicial.',
+                        fullDescription: 'Este documento PDF contiene el "Avance Colaborativo M1: Desarrollo del Emprendedor". Incluye secciones clave para el desarrollo de un proyecto emprendedor como la innovación del producto (combinación de dulces con medicamentos para niños), el modelo de negocio (venta a farmacias, hospitales pediátricos, online), la propuesta de valor (administración agradable de medicamentos), la investigación de mercado (demanda de gomitas con vitaminas para niños, necesidades de padres, competencia, tendencias), la estrategia de marketing (campaña orientada a padres, redes sociales, influencers), la calidad y regulaciones (cumplimiento de normativas locales, permisos, certificación de vitaminas), la visión (objetivos a corto, mediano y largo plazo) y la atención al cliente (satisfacción, servicio, lealtad).\n\nPara ver el documento completo, haz clic en el botón de abajo.',
+                        type: 'Reporte PDF',
+                        score: 'Bueno',
+                        pdfUrl: 'https://drive.google.com/file/d/1l653ocLL0SltqQb7ySKFEgEAsTqL-Vxp/preview' 
+                    }
+                ],
+                estadistica: [
+                    {
+                        id: 'avance-colab-desarrollo-pdf',
+                        title: 'Avance Colaborativo M1: Desarrollo del Emprendedor',
+                        date: 'Fecha del Documento', 
+                        imgSrc: 'https://via.placeholder.com/600x400?text=Avance+Colab.+Estadística', 
+                        description: 'Documento que detalla el Avance Colaborativo M1 de la materia de Desarrollo del Emprendedor, enfocado en innovación, modelo de negocio, investigación de mercado, y más.',
+                        fullDescription: 'Este PDF contiene el "Avance Colaborativo M1: Desarrollo del Emprendedor". Incluye secciones clave para el desarrollo de un proyecto emprendedor como la innovación del producto (combinación de dulces con medicamentos para niños), el modelo de negocio (venta a farmacias, hospitales pediátricos, online), la propuesta de valor (administración agradable de medicamentos), la investigación de mercado (demanda de gomitas con vitaminas para niños, necesidades de padres, competencia, tendencias), la estrategia de marketing (campaña orientada a padres, redes sociales, influencers), la calidad y regulaciones (cumplimiento de normativas locales, permisos, certificación de vitaminas), la visión (objetivos a corto, mediano y largo plazo) y la atención al cliente (satisfacción, servicio, lealtad).\n\nPara ver el documento completo, haz clic en el botón de abajo.',
+                        type: 'Documento PDF',
+                        score: 'Completo',
+                        pdfUrl: 'https://drive.google.com/file/d/1l653ocLL0SltqQb7ySKFEgEAsTqL-Vxp/preview' 
+                    }
+                ],
+                psicologia: [],
+                ciudadania: [],
+                ciencia: [],
+                historia: []
+            };
+
+            function renderEvidenceCards(subjectName) {
+                const grid = document.querySelector(`#${subjectName} .evidence-grid`);
+                if (!grid) {
+                    console.error(`Grid not found for subject: ${subjectName}`);
+                    return;
+                }
+                grid.innerHTML = ''; 
+                if (!evidenceData[subjectName] || evidenceData[subjectName].length === 0) {
+                    grid.innerHTML = '<p style="color: #555;">No hay evidencias disponibles para esta materia.</p>';
+                    return;
+                }
+
+                evidenceData[subjectName].forEach(evidence => {
+                    const card = document.createElement('div');
+                    card.classList.add('evidence-card');
+                    card.dataset.evidenceId = evidence.id; 
+                    card.dataset.subject = subjectName; 
+
+                    card.innerHTML = `
+                        <div class="evidence-img">
+                            <img src="${evidence.imgSrc || 'https://via.placeholder.com/600x400'}" alt="${evidence.title}">
+                        </div>
+                        <div class="evidence-content">
+                            <h3 class="evidence-title">${evidence.title}</h3>
+                            <p class="evidence-date">${evidence.date}</p>
+                            <p class="evidence-desc">${evidence.description}</p>
+                        </div>
+                        <div class="evidence-footer">
+                            <span class="evidence-type">${evidence.type}</span>
+                            <span>Calificación: ${evidence.score || 'N/A'}</span>
+                        </div>
+                    `;
+                    grid.appendChild(card);
+
+                    card.addEventListener('click', () => {
+                        const subjectData = evidenceData[card.dataset.subject];
+                        const clickedEvidence = subjectData.find(ev => ev.id === card.dataset.evidenceId);
+                        
+                        if (clickedEvidence) {
+                            modalEvidenceTitle.textContent = clickedEvidence.title;
+                            modalEvidenceDate.textContent = clickedEvidence.date;
+                            
+                            modalEvidenceDesc.innerHTML = clickedEvidence.fullDescription.replace(/\n/g, '<br>');
+                            modalEvidenceType.textContent = clickedEvidence.type;
+                            modalEvidenceScore.textContent = `Calificación: ${clickedEvidence.score || 'N/A'}`;
+
+                            // Manejo del PDF
+                            if (clickedEvidence.pdfUrl) { // Si existe pdfUrl
+                                modalEvidenceImg.style.display = 'none'; // Ocultar imagen
+                                modalPdfViewLink.href = clickedEvidence.pdfUrl;
+                                modalPdfViewLink.textContent = 'Ver Documento PDF Completo';
+                                modalPdfViewLink.style.backgroundColor = 'var(--primary-color)';
+                                modalPdfLinkContainer.style.display = 'block';
+                            } else { // Si no existe pdfUrl
+                                modalEvidenceImg.style.display = 'block';
+                                modalEvidenceImg.src = clickedEvidence.imgSrc || 'https://via.placeholder.com/600x400';
+                                modalEvidenceImg.alt = clickedEvidence.title;
+                                modalPdfLinkContainer.style.display = 'none'; // Ocultar el botón de PDF
+                            }
+                            modal.classList.add('active');
+                        }
+                    });
+                });
+            }
+            
+            subjectBtns.forEach(button => {
+                button.addEventListener('click', () => {
+                    if (!contentShown) {
+                        subjectsContent.classList.add('show-content');
+                        setTimeout(() => {
+                            const firstActiveSection = document.querySelector('.subject-section.active');
+                            if (firstActiveSection) {
+                                firstActiveSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                            } else {
+                                subjectsContent.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                            }
+                        }, 100); 
+                        contentShown = true;
+                    }
+
+                    subjectBtns.forEach(btn => btn.classList.remove('active'));
+                    subjectSections.forEach(section => section.classList.remove('active'));
+            
+                    button.classList.add('active');
+                    const targetSubject = button.dataset.subject;
+                    const targetSection = document.getElementById(targetSubject);
+                    if (targetSection) {
+                        targetSection.classList.add('active');
+                        renderEvidenceCards(targetSubject);
+                        if (contentShown && targetSection !== subjectsContent) {
+                           setTimeout(() => { 
+                             targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                           }, 500); 
+                        }
+                    } else {
+                        console.error(`Section not found for ID: ${targetSubject}`);
+                    }
+                });
+            });
+            
+            closeModalBtn.addEventListener('click', () => {
+                modal.classList.remove('active');
+            });
+            
+            window.addEventListener('click', (event) => {
+                if (event.target == modal) {
+                    modal.classList.remove('active');
+                }
+            });
+            
+            window.addEventListener('scroll', () => {
+                if (window.pageYOffset > 200) {
+                    scrollTopBtn.classList.add('visible');
+                } else {
+                    scrollTopBtn.classList.remove('visible');
+                }
+            });
+            
+            scrollTopBtn.addEventListener('click', () => {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            });
+
+            // Opcional: Si quieres que una sección se muestre por defecto al cargar la página
+            // const defaultSubjectButton = document.querySelector('.subject-btn[data-subject="desarrollo"]');
+            // if (defaultSubjectButton) {
+            //     defaultSubjectButton.click();
+            // }
+        });
+    </script>
+</body>
+</html>
